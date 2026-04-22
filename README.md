@@ -1,5 +1,3 @@
-![today](assets/public/스크린샷%202026-04-22%20130103.png)
-
 A Windows desktop app that tracks active window usage time and stores it locally. Built with Rust and egui — single executable, no external service.
 
 ## Download

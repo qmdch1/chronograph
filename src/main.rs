@@ -80,6 +80,7 @@ fn main() -> Result<()> {
     });
 
     let ctx_slot: Arc<Mutex<Option<egui::Context>>> = Arc::new(Mutex::new(None));
+    single_instance::SingleInstance::listen_for_show(ctx_slot.clone());
     let (_tray_icon, tray_rx) = tray::create(ctx_slot.clone())?;
 
     let rt_handle = rt.handle().clone();

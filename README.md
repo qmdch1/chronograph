@@ -2,6 +2,12 @@
 
 A Windows desktop app that tracks active window usage time and stores it locally. Built with Rust and egui — single executable, no external service.
 
+## Download
+
+| File | Platform |
+|------|----------|
+| [chronograph.exe](https://github.com/qmdch1/chronograph/releases/latest/download/chronograph.exe) | Windows (x64) |
+
 ## Features
 
 - Real-time active window tracking via `wineventhook` + 1-second polling fallback
@@ -19,12 +25,6 @@ A Windows desktop app that tracks active window usage time and stores it locally
 | Today | History | App Manager |
 |-------|---------|-------------|
 | ![today](assets/public/스크린샷%202026-04-22%20130103.png) | ![history](assets/public/스크린샷%202026-04-22%20130111.png) | ![app manager](assets/public/스크린샷%202026-04-22%20130115.png) |
-
-## Download
-
-| File | Platform |
-|------|----------|
-| [chronograph.exe](https://github.com/qmdch1/chronograph/releases/latest/download/chronograph.exe) | Windows (x64) |
 
 ## Commands
 

@@ -3,6 +3,7 @@ name = "chronograph"
 version = "0.1.0"
 edition = "2024"
 description = "Windows activity tracker — logs active window usage time locally."
+license = "MIT"
 
 [dependencies]
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }

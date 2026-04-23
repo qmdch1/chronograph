@@ -51,3 +51,7 @@ A Windows desktop app that tracks active window usage time and stores it locally
 3. **Idle guard** — `GetLastInputInfo` pauses logging when the user is away
 4. **Aggregator** — merges hook and idle events, writes sessions to SQLite
 5. **App manager** — hidden apps are excluded from the UI but still recorded in the DB
+
+## License
+
+MIT — see [LICENSE](LICENSE).

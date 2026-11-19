@@ -1,0 +1,72 @@
+name: Release
+
+# Builds chronograph.exe with the MSVC toolchain on Windows and attaches it to
+# the GitHub Release for the tag. The asset name must not change; the README
+# links to releases/latest/download/chronograph.exe.
+#
+# Tags: the first release was tagged `1.0.0` (no `v`). Both forms are accepted
+# here; please use `vX.Y.Z` for new releases.
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "[0-9]+.[0-9]+.[0-9]+*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to build and upload assets for (for example v1.0.1)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ inputs.tag || github.ref_name }}
+
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+
+      - name: Check tag matches Cargo.toml version
+        run: |
+          $crate = (cargo metadata --no-deps --format-version 1 | ConvertFrom-Json).packages[0].version
+          $tagVersion = $env:TAG -replace '^v', ''
+          if ($tagVersion -ne $crate) {
+            Write-Output "::warning::Tag $env:TAG does not match Cargo.toml version $crate"
+          }
+
+      - name: Build chronograph.exe
+        run: |
+          cargo build --release --locked
+          if ($LASTEXITCODE -ne 0) { throw 'build failed' }
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item target/release/chronograph.exe dist/chronograph.exe
+
+      - name: Write SHA256 checksum
+        run: |
+          $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath dist/chronograph.exe).Hash.ToLowerInvariant()
+          [IO.File]::WriteAllText("$PWD/dist/chronograph.exe.sha256", "$hash  chronograph.exe`n")
+          Get-Content dist/chronograph.exe.sha256
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          fail_on_unmatched_files: true
+          files: |
+            dist/chronograph.exe
+            dist/chronograph.exe.sha256

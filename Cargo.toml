@@ -1,9 +1,12 @@
 [package]
 name = "chronograph"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2024"
 description = "Windows activity tracker — logs active window usage time locally."
 license = "MIT"
+repository = "https://github.com/qmdch1/chronograph"
+homepage = "https://github.com/qmdch1/chronograph"
+readme = "README.md"
 
 [dependencies]
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
